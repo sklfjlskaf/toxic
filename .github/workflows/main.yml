@@ -1,0 +1,35 @@
+name: GitHub Runner as VPS with SSH
+
+on: 
+  push
+
+jobs:
+  setup-vps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update & Install Dependencies
+        run: |
+          sudo apt update && sudo apt install -y openssh-server unzip curl
+
+      - name: Set Up SSH Password
+        run: |
+          echo "runner:runnerpassword" | sudo chpasswd
+          sudo sed -i 's/#PasswordAuthentication no/PasswordAuthentication yes/g' /etc/ssh/sshd_config
+          sudo sed -i 's/PermitRootLogin prohibit-password/PermitRootLogin yes/g' /etc/ssh/sshd_config
+          sudo systemctl restart ssh
+
+      - name: Install Ngrok
+        run: |
+          curl -s https://ngrok-agent.s3.amazonaws.com/ngrok.asc | sudo tee /etc/apt/trusted.gpg.d/ngrok.asc >/dev/null
+          echo "deb https://ngrok-agent.s3.amazonaws.com buster main" | sudo tee /etc/apt/sources.list.d/ngrok.list
+          sudo apt update && sudo apt install ngrok
+
+      - name: Start Ngrok SSH Tunnel
+        run: |
+          ngrok authtoken 2ssUnpDmGRXSDfvVSXDKQ6py1Xf_7fMKjUFxg6AhRHr9AcrKw
+          ngrok tcp 22 > /dev/null & 
+          sleep 5
+          curl -s localhost:4040/api/tunnels | jq -r '.tunnels[0].public_url'
+
+      - name: Keep VPS Running
+        run: sleep 86400
